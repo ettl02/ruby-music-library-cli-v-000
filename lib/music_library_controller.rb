@@ -63,4 +63,17 @@ class MusicLibraryController
       puts "Sorry, artist not found!"
     end
   end
-end 
+
+  def list_genre
+    puts "Please enter the name of the artist to see songs by that artist"
+    choice = gets.chomp.downcase
+    Song.all.each do |song|
+      if song.genre.name.downcase == choice.downcase
+        puts "#{song.artist.name} - #{song.name} - #{song.genre.name}"
+      end
+    end
+    if Song.all.none? {|song| song.genre.name.downcase == choice}
+      puts "Sorry, genre not found!"
+    end
+  end
+end
