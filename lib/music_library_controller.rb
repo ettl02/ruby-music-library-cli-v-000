@@ -76,4 +76,4 @@ class MusicLibraryController
       puts "Sorry, genre not found!"
     end
   end
-end
+
