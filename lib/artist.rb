@@ -34,14 +34,7 @@ extend Concerns::Findable
     song.artist = self if song.artist.nil?
   end
 
-
-    if !@songs.include?(song)
-      @songs << song
-    end
-  end
-
   def genres
     self.songs.map { |song| song.genre}.uniq
   end
-
 end
