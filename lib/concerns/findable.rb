@@ -10,3 +10,4 @@ module Concerns
       self.find_by_name(name) ? self.find_by_name(name) : self.create(name)
     end
   end
+end 
