@@ -1,6 +1,7 @@
 module Concerns
   module Findable
-  end 
+end
+end
   def find_by_name(name)
     all.find{ |x| x.name == name}
   end
