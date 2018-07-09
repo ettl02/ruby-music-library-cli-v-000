@@ -7,7 +7,7 @@ extend Concerns::Findable
   def initialize(name)
     @name = name
     @songs = []
-  
+
   end
 
   def self.all
@@ -19,19 +19,21 @@ extend Concerns::Findable
   end
 
   def save
-    @@all << self unless @@all.include?(self) 
+    @@all << self unless @@all.include?(self)
   end
 
   def self.create(artist)
-    artist = Artist.new(artist) 
+    artist = Artist.new(artist)
     artist.save
     artist
-  end 
-  
+  end
+
   def add_song(song)
-    if song.artist == nil
-      song.artist = self
-    end
+    def add_song(song)
+    @songs << song unless @songs.include?(song)
+    song.artist = self if song.artist.nil?
+  end
+
 
     if !@songs.include?(song)
       @songs << song
