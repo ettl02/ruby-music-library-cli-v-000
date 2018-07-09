@@ -1,5 +1,5 @@
 class MusicImporter
-  
+
   attr_accessor :path
 
   def initialize(file_path)
@@ -19,7 +19,7 @@ class MusicImporter
       song_name = file[1]
       artist = Artist.find_or_create_by_name(file[0])
       genre = Genre.find_or_create_by_name(file[2].split('.')[0])
-      Song.create(song_name, artist, genre) 
+      Song.create(song_name, artist, genre)
     end
   end
 end
