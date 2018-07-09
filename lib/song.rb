@@ -1,30 +1,13 @@
 class Song
-  extend Concerns::Findable
-  attr_accessor :name, :artist, :genre
+  attr_accessor :name
+  attr_reader :artist, :genre
 
   @@all = []
-  def initialize(name, artist=nil, genre=nil)
+
+  def initialize(name, artist = nil, genre = nil)
     @name = name
-    self.artist = artist if artist != nil
-    self.genre = genre if genre != nil
-  end
-
-  def self.all
-    @@all.uniq
-  end
-
-  def self.destroy_all
-    @@all.clear
-  end
-
-  def save
-    @@all << self unless @@all.include?(self)
-  end
-
-  def self.create(song, artist=nil, genre=nil)
-    new_song = Song.new(song, artist, genre)
-    new_song.save
-    new_song
+    self.artist = artist if artist
+    self.genre = genre if genre
   end
 
   def artist=(artist)
@@ -37,15 +20,46 @@ class Song
     genre.songs << self unless genre.songs.include?(self)
   end
 
-  def self.new_from_filename(song)
-    song_parts = song.split(" - ")
-    song_name = song_parts[1]
-    artist = Artist.find_or_create_by_name(song_parts[0])
-    genre = Genre.find_or_create_by_name(song_parts[2].split('.')[0])
-    self.create(song_name, artist, genre)
+  def self.all
+    @@all
   end
 
-  def self.create_from_filename(song)
-    self.new_from_filename(song)
+  def self.destroy_all
+    all.clear
+  end
+
+  def save
+    self.class.all << self
+  end
+
+  def self.create(name)
+    song = new(name)
+    song.save
+    song
+
+    # Or, as a one-liner:
+    # new(name).tap{ |s| s.save }
+  end
+
+  def self.find_by_name(name)
+    all.detect{ |s| s.name == name }
+  end
+
+  def self.find_or_create_by_name(name)
+    find_by_name(name) || create(name)
+  end
+
+  def self.new_from_filename(filename)
+    parts = filename.split(" - ")
+    artist_name, song_name, genre_name = parts[0], parts[1], parts[2].gsub(".mp3", "")
+
+    artist = Artist.find_or_create_by_name(artist_name)
+    genre = Genre.find_or_create_by_name(genre_name)
+
+    new(song_name, artist, genre)
+  end
+
+  def self.create_from_filename(filename)
+    new_from_filename(filename).tap{ |s| s.save }
   end
 end
